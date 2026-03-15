@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: antimatter
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: OPENAI_MODEL
+        value: gpt-5.4
+      - key: OPENAI_API_KEY
+        sync: false
