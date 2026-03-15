@@ -83,5 +83,139 @@
     <footer class="footer">
       <p>phuantimatter &mdash; a concept landing page for the Antimatter app.</p>
     </footer>
+    <title>Antimatter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <p class="eyebrow">Antimatter Generator</p>
+        <h1>Press buttons, build antimatter, and track payout-ready points.</h1>
+        <p class="hero-copy">
+          Antimatter is a lightweight demo interface for tapping to create antimatter,
+          collecting points, and keeping a 15% passive boost running while the page
+          stays open in the background.
+        </p>
+
+        <div class="controls">
+          <button id="generate-button" class="primary-button" type="button">
+            Generate Antimatter
+          </button>
+          <button id="passive-button" class="secondary-button" type="button" aria-pressed="false">
+            Start 15% Passive Boost
+          </button>
+        </div>
+
+        <div class="stats-grid" aria-live="polite">
+          <article class="stat-card">
+            <span class="stat-label">Antimatter</span>
+            <strong id="antimatter-total" class="stat-value">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Points</span>
+            <strong id="points-total" class="stat-value">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Estimated payout</span>
+            <strong id="cash-total" class="stat-value">$0.00</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel-grid">
+        <article class="panel">
+          <h2>Payout options</h2>
+          <p>
+            Select how earned points could be prepared for payout once a secure backend
+            integration is connected.
+          </p>
+          <div class="payout-options">
+            <button class="payout-button selected" data-method="Stripe" type="button">
+              Stripe Integration
+            </button>
+            <button class="payout-button" data-method="Bank e-Transfer" type="button">
+              Bank e-Transfer
+            </button>
+          </div>
+          <p id="payout-status" class="status-text">Selected payout method: Stripe</p>
+        </article>
+
+        <article class="panel">
+          <h2>Owner &amp; developer</h2>
+          <p>Phu Quoc Nguyen is featured as the owner and developer of the Antimatter app concept.</p>
+          <ul class="feature-list">
+            <li>Tap-to-generate antimatter action</li>
+            <li>Point tracking with payout estimate</li>
+            <li>15% passive background boost while the page remains open</li>
+          </ul>
+        </article>
+      </section>
+
+      <p class="footer-note">
+        Demo experience only: real payment processing and financial transfers require a
+        secure backend, compliance review, and verified Stripe or banking setup.
+      </p>
+    </main>
+
+    <script>
+      const antimatterTotal = document.getElementById('antimatter-total');
+      const pointsTotal = document.getElementById('points-total');
+      const cashTotal = document.getElementById('cash-total');
+      const generateButton = document.getElementById('generate-button');
+      const passiveButton = document.getElementById('passive-button');
+      const payoutButtons = document.querySelectorAll('.payout-button');
+      const payoutStatus = document.getElementById('payout-status');
+
+      let antimatter = 0;
+      let points = 0;
+      let passiveTimer = null;
+      const payoutRate = 0.05;
+      const currencyFormatter = new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency: 'CAD',
+      });
+
+      function renderTotals() {
+        antimatterTotal.textContent = antimatter.toLocaleString();
+        pointsTotal.textContent = points.toLocaleString();
+        cashTotal.textContent = currencyFormatter.format(points * payoutRate);
+      }
+
+      function generate(amount) {
+        antimatter += amount;
+        points += amount;
+        renderTotals();
+      }
+
+      generateButton.addEventListener('click', () => generate(1));
+
+      passiveButton.addEventListener('click', () => {
+        if (passiveTimer) {
+          window.clearInterval(passiveTimer);
+          passiveTimer = null;
+          passiveButton.textContent = 'Start 15% Passive Boost';
+          passiveButton.setAttribute('aria-pressed', 'false');
+          return;
+        }
+
+        passiveTimer = window.setInterval(() => {
+          const passiveGain = Math.max(1, Math.ceil(points * 0.15));
+          generate(passiveGain);
+        }, 1500);
+
+        passiveButton.textContent = 'Pause 15% Passive Boost';
+        passiveButton.setAttribute('aria-pressed', 'true');
+      });
+
+      payoutButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          payoutButtons.forEach((item) => item.classList.remove('selected'));
+          button.classList.add('selected');
+          payoutStatus.textContent = `Selected payout method: ${button.dataset.method}`;
+        });
+      });
+
+      renderTotals();
+    </script>
   </body>
 </html>
