@@ -1,0 +1,159 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at top, #25103a, #09060f 60%);
+  color: #f7f0ff;
+}
+
+.app-shell {
+  width: min(960px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0 4rem;
+}
+
+.hero,
+.panel {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  background: rgba(13, 13, 27, 0.82);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.hero {
+  padding: 2.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ab88ff;
+  font-size: 0.8rem;
+}
+
+h1,
+h2 {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.05;
+  margin-bottom: 1rem;
+}
+
+.hero-copy,
+.panel p,
+.footer-note,
+.feature-list {
+  color: #d8caea;
+  line-height: 1.6;
+}
+
+.controls,
+.payout-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.controls {
+  margin: 2rem 0;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.95rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #8f5bff, #33d1ff);
+  color: #fff;
+  box-shadow: 0 16px 32px rgba(64, 145, 255, 0.24);
+}
+
+.secondary-button,
+.payout-button {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.payout-button.selected {
+  background: rgba(143, 91, 255, 0.2);
+  border-color: #8f5bff;
+}
+
+.stats-grid,
+.panel-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.stats-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.stat-card {
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #cbb8f3;
+}
+
+.stat-value {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.panel-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.panel {
+  padding: 1.75rem;
+}
+
+.status-text {
+  margin-bottom: 0;
+  font-weight: 700;
+  color: #fff;
+}
+
+.feature-list {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.footer-note {
+  margin: 1.5rem 0 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .hero,
+  .panel {
+    padding: 1.5rem;
+  }
+}
