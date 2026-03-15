@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antimatter – Collect Across 100 Dimensions</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://js.stripe.com/v3/" defer></script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ AUTH MODAL ═══════════════════════════ -->
+<div id="auth-overlay" class="overlay active">
+  <div class="modal">
+    <h1 class="logo">⚛ ANTIMATTER</h1>
+    <p class="tagline">Collect antimatter across 100 dimensions</p>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="login">Login</button>
+      <button class="tab-btn" data-tab="register">Register</button>
+    </div>
+
+    <!-- Login -->
+    <form id="login-form" class="auth-form">
+      <div class="form-group">
+        <label for="login-identifier">Username or Email</label>
+        <input type="text" id="login-identifier" autocomplete="username" required />
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" autocomplete="current-password" required />
+      </div>
+      <div id="login-error" class="form-error hidden"></div>
+      <button type="submit" class="btn btn-primary btn-full">Login</button>
+    </form>
+
+    <!-- Register -->
+    <form id="register-form" class="auth-form hidden">
+      <div class="form-group">
+        <label for="reg-username">Username</label>
+        <input type="text" id="reg-username" autocomplete="username" required />
+      </div>
+      <div class="form-group">
+        <label for="reg-email">Email</label>
+        <input type="email" id="reg-email" autocomplete="email" required />
+      </div>
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" autocomplete="new-password" required />
+      </div>
+      <div id="register-error" class="form-error hidden"></div>
+      <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ MAIN GAME ════════════════════════════ -->
+<div id="game-container" class="hidden">
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="logo-small">⚛ ANTIMATTER</div>
+    <div class="stats-bar">
+      <span class="stat-item" title="Total Antimatter">⚛ <span id="stat-antimatter">0</span></span>
+      <span class="stat-item" title="Total Points">★ <span id="stat-points">0</span></span>
+      <span class="stat-item" title="Level">Lv <span id="stat-level">1</span></span>
+      <span class="stat-item gold" title="Gold Coins">🪙 <span id="stat-gold">0</span></span>
+      <span class="stat-item purple" title="Phu81 Tokens">💜 <span id="stat-phu81">0</span></span>
+    </div>
+    <div class="header-actions">
+      <span id="passive-ticker" class="passive-ticker">+0/s</span>
+      <button class="btn btn-sm" id="btn-logout">Logout</button>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="panel-nav">
+    <button class="nav-btn active" data-panel="dimensions">🌌 Dimensions</button>
+    <button class="nav-btn" data-panel="shop">🛒 Shop</button>
+    <button class="nav-btn" data-panel="wallet">💰 Wallet</button>
+    <button class="nav-btn" data-panel="upgrades">⬆ Upgrades</button>
+  </nav>
+
+  <!-- ── Dimensions Panel ── -->
+  <section id="panel-dimensions" class="panel active">
+    <div class="panel-header">
+      <h2>Dimensions</h2>
+      <div class="level-bar-wrap">
+        <div class="level-label">Level <span id="lv-num">1</span></div>
+        <div class="level-bar-bg">
+          <div id="level-progress-bar" class="level-bar-fill" style="width:0%"></div>
+        </div>
+        <div class="level-pts">
+          <span id="lv-pts-current">0</span> / <span id="lv-pts-needed">1000</span> pts
+        </div>
+        <button class="btn btn-sm btn-glow" id="btn-level-up">Level Up!</button>
+      </div>
+    </div>
+    <div id="dimension-grid" class="dimension-grid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- ── Shop Panel ── -->
+  <section id="panel-shop" class="panel hidden">
+    <h2>Gold Coin Shop</h2>
+    <p class="shop-intro">Buy gold coins (phu81 tokens) to unlock and upgrade dimensions.</p>
+    <div id="shop-packages" class="packages-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div id="shop-message" class="shop-message hidden"></div>
+    <!-- Stripe card element placeholder -->
+    <div id="stripe-container" class="stripe-container hidden">
+      <h3>Complete Payment</h3>
+      <div id="card-element" class="stripe-card-element"></div>
+      <div id="card-errors" class="form-error"></div>
+      <div class="stripe-actions">
+        <button class="btn btn-primary" id="btn-confirm-payment">Pay</button>
+        <button class="btn btn-secondary" id="btn-cancel-payment">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Wallet Panel ── -->
+  <section id="panel-wallet" class="panel hidden">
+    <h2>Wallet &amp; Redemptions</h2>
+    <div class="wallet-cards">
+      <div class="wallet-card">
+        <div class="wallet-icon">🪙</div>
+        <div class="wallet-label">Gold Coins</div>
+        <div class="wallet-value" id="wallet-gold">0</div>
+      </div>
+      <div class="wallet-card purple-card">
+        <div class="wallet-icon">💜</div>
+        <div class="wallet-label">Phu81 Tokens</div>
+        <div class="wallet-value" id="wallet-phu81">0</div>
+      </div>
+      <div class="wallet-card green-card">
+        <div class="wallet-icon">★</div>
+        <div class="wallet-label">Total Points</div>
+        <div class="wallet-value" id="wallet-points">0</div>
+      </div>
+      <div class="wallet-card gold-card">
+        <div class="wallet-icon">💵</div>
+        <div class="wallet-label">Redeemable USD</div>
+        <div class="wallet-value" id="wallet-usd">$0.00</div>
+      </div>
+    </div>
+
+    <div class="redeem-section">
+      <h3>Redeem Points</h3>
+      <p>1 trillion points = $1.00 USD. Minimum: 1 trillion points.</p>
+      <div class="form-group">
+        <label for="redeem-trillions">Trillions to redeem</label>
+        <input type="number" id="redeem-trillions" min="1" value="1" />
+      </div>
+      <div class="form-group">
+        <label for="redeem-method">Payment method</label>
+        <select id="redeem-method">
+          <option value="etransfer">E-Transfer (anhvankiet81@gmail.com)</option>
+          <option value="stripe">Stripe</option>
+        </select>
+      </div>
+      <div id="redeem-message" class="form-error hidden"></div>
+      <button class="btn btn-primary" id="btn-redeem">Redeem</button>
+    </div>
+  </section>
+
+  <!-- ── Upgrades Panel ── -->
+  <section id="panel-upgrades" class="panel hidden">
+    <h2>Dimension Upgrades</h2>
+    <p class="shop-intro">Spend gold coins to upgrade your unlocked dimensions and boost their antimatter rate.</p>
+    <div id="upgrade-list" class="upgrade-list">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+</div><!-- /game-container -->
+
+<!-- Toast notifications -->
+<div id="toast-container" class="toast-container"></div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
