@@ -1,2 +1,11 @@
 # Antimatter
-Antimatter is a game app that aloud user to collect antimatter in a form dimensions 1 to dimensions 100 and it have different levels and gain points matter to level up matter world with pay points and redeem to real money pay to phu quoc nguyen 43821 004 6369582 anhvankiet81@gmail.com stripr intergration and etransfer bank 
+
+Antimatter is a lightweight static demo page for an antimatter clicker concept. It now includes:
+
+- a button-driven antimatter generator
+- point tracking with an estimated cash-out value
+- payout method selection for Stripe or bank e-Transfer
+- a 15% passive boost mode that keeps generating while the page stays open
+- owner/developer credit for Phu Quoc Nguyen
+
+Open `/home/runner/work/Antimatter/Antimatter/index.html` in a browser to view the demo.
