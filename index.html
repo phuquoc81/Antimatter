@@ -90,14 +90,15 @@
       let points = 0;
       let passiveTimer = null;
       const payoutRate = 0.05;
+      const currencyFormatter = new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency: 'CAD',
+      });
 
       function renderTotals() {
         antimatterTotal.textContent = antimatter.toLocaleString();
         pointsTotal.textContent = points.toLocaleString();
-        cashTotal.textContent = new Intl.NumberFormat('en-CA', {
-          style: 'currency',
-          currency: 'CAD',
-        }).format(points * payoutRate);
+        cashTotal.textContent = currencyFormatter.format(points * payoutRate);
       }
 
       function generate(amount) {
@@ -118,7 +119,7 @@
         }
 
         passiveTimer = window.setInterval(() => {
-          const passiveGain = Math.max(1, Math.ceil(points * 0.15) || 1);
+          const passiveGain = Math.max(1, Math.ceil(points * 0.15));
           generate(passiveGain);
         }, 1500);
 
