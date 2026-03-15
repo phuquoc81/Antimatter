@@ -99,10 +99,10 @@ router.post('/etransfer', authenticate, paymentLimiter, (req, res) => {
   ).run(txId, req.user.id, pkg.price_usd, pkg.gold_coins, pkg.phu81_tokens);
 
   res.json({
-    message: 'E-transfer payment registered. Send your payment to anhvankiet81@gmail.com and include your transaction ID in the message.',
+    message: 'E-transfer payment registered. Send your payment to the registered e-transfer address and include your transaction ID in the message.',
     transactionId: txId,
     amount: pkg.price_usd,
-    etransferEmail: 'anhvankiet81@gmail.com',
+    etransferEmail: process.env.ETRANSFER_EMAIL || '',
   });
 });
 

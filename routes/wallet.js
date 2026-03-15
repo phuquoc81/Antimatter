@@ -79,7 +79,7 @@ router.post('/redeem', authenticate, (req, res) => {
       paymentMethod === 'etransfer'
         ? `Your redemption of $${amountUsd}.00 will be sent to your registered e-transfer address within 3-5 business days.`
         : `Your redemption of $${amountUsd}.00 will be processed via Stripe within 3-5 business days.`,
-    etransferEmail: paymentMethod === 'etransfer' ? 'anhvankiet81@gmail.com' : undefined,
+    etransferEmail: paymentMethod === 'etransfer' ? (process.env.ETRANSFER_EMAIL || '') : undefined,
   });
 });
 

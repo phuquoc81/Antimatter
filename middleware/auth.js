@@ -15,8 +15,11 @@ const EFFECTIVE_SECRET = JWT_SECRET || 'dev_only_secret_change_me_32chars!';
 
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing or invalid authorization header' });
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Missing authorization header' });
+  }
+  if (!authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Invalid authorization header format' });
   }
 
   const token = authHeader.slice(7);
